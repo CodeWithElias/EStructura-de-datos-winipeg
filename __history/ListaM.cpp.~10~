@@ -1,0 +1,203 @@
+//---------------------------------------------------------------------------
+
+#pragma hdrstop
+
+#include "ListaM.h"
+//---------------------------------------------------------------------------
+#pragma package(smart_init)
+
+ListaM::ListaM(){
+  PtrElementos=Nulo;
+  longit=0;
+  mem=new CSMemoria();
+}
+
+
+
+ListaM::ListaM(CSMemoria* m){
+  PtrElementos=Nulo;
+  longit=0;
+   mem=m;
+  // mem->mostrar_memoria();
+}
+
+
+
+int ListaM::fin(){
+ if(vacia()){
+	cout<<"ERROR/FIN():Lista Vacia";
+ }else{
+
+ int x = PtrElementos;
+ int ptrfin;
+	while(x!=Nulo){
+		ptrfin= x;
+		x=mem->obtener_dato(x,sigNL);
+	}
+	return ptrfin;
+ }
+}
+
+
+
+int ListaM::primero(){
+  if(!vacia()){
+	return PtrElementos;
+  }else{
+	cout<<"ERROR/Primero():Lista Vacia";
+  }
+}
+
+
+
+int ListaM::siguiente(int d){ // DEVUELVE LA DIRECCION SIGUIENTE DE UNA MEMORIA
+	if(vacia()
+	){
+		cout<<"ERROR/Siguiente():Lista Vacia";
+	}else{
+		if(d==fin()){
+		   cout<<"ERROR/ Dirrecion Erronea";
+		}
+		return mem->obtener_dato(d,sigNL);//d->sig;
+	}
+}
+
+
+
+int ListaM::anterior( int d){ // DEVUELVE LA DIRECCION ANTERIOR DE UNA MEMORIA
+  if(vacia()){
+	 cout<<"ERROR/Anterior:Lista Vacia";
+  }else{
+	int x= PtrElementos;
+	int ant=Nulo;
+	while(x!=Nulo){
+		 if(x==d){
+		  return ant;
+		 }
+		 ant=x;
+		 x=mem->obtener_dato(x,sigNL);//x=x->sig;
+	}
+	return Nulo;
+  }
+}
+
+
+
+bool ListaM::vacia(){
+	return longit==0;
+}
+
+
+
+int ListaM::recupera(int d){ // OBTIENE EL ELEMENTO DE UNA DIRECCION
+  if(vacia()){
+	 cout<<"ERROR/recuperar:Lista Vacia";
+  }else{
+	  return mem->obtener_dato(d,elemNL);//d->elemento;
+  }
+}
+
+
+int ListaM::longitud(){
+	return longit;
+}
+
+
+
+void ListaM::inserta(int d, int elem){  // d=direccion
+ int x=mem->new_espacio(datoNL);
+  if(x!=Nulo){
+	mem->poner_dato(x,elemNL,elem);//x->elemento=elem;
+	mem->poner_dato(x,sigNL,Nulo);
+	if(vacia()){ //caso1 lista vacia
+		PtrElementos=x;
+		longit=1;
+	}else{
+        longit++;
+	   if( d==primero()){ //caso 2 inserta de primero
+		  mem->poner_dato(x,sigNL,d);
+		  PtrElementos=x;
+	   }else{    //caso 3 a la izq de la direccion
+		 int ant=anterior(d);
+		 mem->poner_dato(ant,sigNL,x);
+		 mem->poner_dato(x,sigNL,d);
+	   }
+	}
+  }
+}
+
+
+
+void ListaM::inserta_primero(int elem){
+  int x=mem->new_espacio(datoNL);				// NodoL* x=new NodoL;
+  if(x!=Nulo){
+	   mem->poner_dato(x,elemNL,elem);//x->elemento=elem;
+	   mem->poner_dato(x,sigNL,PtrElementos);//x->sig=PtrElementos;
+	   PtrElementos=x;
+	   longit++;
+  }
+}
+
+
+
+void ListaM::inserta_ultimo(int elem){   // INSERTA UN ELEMENTO ALA ULTIMA DIRECCION DE LA MEMORIA
+  int x=mem->new_espacio(datoNL);
+	if (x != Nulo) {
+		mem->poner_dato(x,elemNL,elem);//x->elemento = elem;
+		mem->poner_dato(x,sigNL,Nulo);//x->sig = Nulo;
+		if (vacia())
+			PtrElementos = x;
+		else
+			mem->poner_dato(fin(),sigNL,x);//fin()->sig = x;
+		longit++;
+
+  } else{
+	  cout<<"ERROR:No existe espacio en la memoria\n";
+  }
+
+}
+
+
+
+void ListaM::suprime( int d){  // ELIMINA LA DIRECCION DE UNA MEMORIA
+   if(longit==0){
+		cout<<"ERROR:LISTA VACIA";
+		return;
+   }else{
+	  if(d==PtrElementos){ //si es el primer elemento
+		int x=PtrElementos;
+		PtrElementos=mem->obtener_dato(PtrElementos,sigNL);//PtrElementos=PtrElementos->sig;
+	   mem->Delete_espacio(d); //	delete(d);
+	  }else{
+		  int ant=anterior(d);
+		 mem->poner_dato(ant,sigNL,mem->obtener_dato(d,sigNL));//ant->sig=siguiente(d);
+		 mem->Delete_espacio(d);//delete(d);
+	  }
+   }
+   longit--;
+}
+
+
+void ListaM::modifica( int d, int elem){ // MODIFICA EL ELEMENTO DE UNA DIRECCION DE MEMORIA
+	if(vacia()){
+	   cout<<"ERROR LISTA VACIA\n";
+	 }else{
+		 mem->poner_dato(d,elemNL,elem); //d->elemento=elem;
+	 }
+}
+
+
+
+string ListaM::to_str(){
+string s="<";
+int aux=PtrElementos;
+	while(aux!=Nulo){
+		int elemento=mem->obtener_dato(aux,elemNL);//int elemento=aux->elemento;
+		s=s+to_string(elemento);
+		aux=mem->obtener_dato(aux,sigNL);//aux=aux->sig;
+		if(aux!=Nulo){
+			s=s+",";
+		}
+	}
+return s+">";
+}

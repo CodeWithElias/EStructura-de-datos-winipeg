@@ -1,0 +1,64 @@
+#include <iostream>
+#include <string>
+using namespace std;
+	int Numero_Ids(string cadena);
+	string Obtener_Id(string cadena, int n);
+
+int main(){
+   //	int* n=new int [5];    // asi se define un vector
+  /*	NodoMem *mem;
+	mem=new NodoMem[Max];
+	for (int i = 0; i < Max; i++) {
+		mem[i].link=i+1;
+	}
+	mem[Max-1].link=-1;
+
+	for (int i = 0; i < Max; i++) {
+		cout<<"dirreccion "<<i<<":"<<endl;
+		cout<<"dato "<<mem[i].dato<<endl;
+		cout<<"id"<<mem[i].id<<endl;
+		cout<<"link "<<mem[i].link<<endl;
+		cout<<"------------------"<<endl;
+	}
+	*/
+string cadena="ola, como, estas, bien";
+cout<<"cantidad : "<<Obtener_Id(cadena,2)<<endl;
+	cout <<"hola mundo"<<endl;
+	system ("pause");
+	return 0;
+}
+
+int Numero_Ids(string cadena){
+	int cantidad=0;
+	for (int i = 0; i < cadena.length(); i++) {
+		if (cadena[i]==',') {
+			cantidad ++;
+		}
+	}
+	if (!cadena.empty()) {
+		cantidad+=1;
+	} else{
+		cantidad+=0;
+	}
+	return cantidad;
+}
+
+string Obtener_Id(string cadena, int n){
+	string palabra="";
+	int contador=0;
+	int i=0;
+	while (contador<n-1 && i<cadena.length()){
+		if (cadena.at(i)==',') {   // at : compara con y devuelve verdadero si son iguales
+			contador ++;
+			cadena= cadena.substr(i+1,cadena.length()-(cadena.substr(0,i).length()));
+			i=-1;
+		}
+		i++;
+	}
+	i=0;
+	while (cadena[i]!=',' && i<cadena.length()){
+		i++;
+	}
+	palabra=cadena.substr(0,i);
+	return palabra;
+}

@@ -1,0 +1,194 @@
+﻿//---------------------------------------------------------------------------
+
+#pragma hdrstop
+
+#include "PolinomioP.h"
+//---------------------------------------------------------------------------
+#pragma package(smart_init)
+
+
+PolinomioP::PolinomioP(){
+	Ptr_Poli=NULL;
+	Nterminos=0;
+}
+
+
+bool PolinomioP::Es_Cero(){
+	return Nterminos==0;
+}
+
+
+int PolinomioP::Grado(){
+	if (!Es_Cero()) {
+		int max=Ptr_Poli->Expo;
+		NodoPoli* aux=Ptr_Poli;
+		while (aux!=NULL){
+			if (aux->Expo>max) {
+				max=aux->Expo;
+			}
+			// cambio de nodo o bagon
+			aux=aux->sig;
+		}
+		return max;
+	}
+}
+
+
+
+int PolinomioP::coeficiente(int exp){
+	if (exp!=NULL) {
+		return Ptr_Poli->Coef;
+	}else{
+		cout<<"No existe termino";
+	}
+}
+
+
+
+void PolinomioP::Asignar_coeficiente(int coefi, int exp){
+	NodoPoli* dir=Buscar_Exponente(exp);
+	if (dir!=NULL) {
+		dir->Coef=coefi;
+		if (coefi==0) {
+		   	suprime(dir);
+			Nterminos--;
+		}
+	}
+}
+
+
+
+void PolinomioP::Poner_termino(int coef, int exp){
+	NodoPoli* dir=Buscar_Exponente(exp);
+	if (!dir) {
+		NodoPoli* aux=new NodoPoli();
+		if (aux!=NULL) {
+			aux->Coef=coef;
+			aux->Expo=exp;
+			aux->sig=Ptr_Poli;
+			Ptr_Poli=aux;
+			Nterminos++;
+		}
+	} else{
+		int new_coef=coef+dir->Coef;
+		dir->Coef=new_coef;
+		if (new_coef==0) {
+			suprime(dir);
+			Nterminos--;
+		}
+	}
+}
+
+
+
+int PolinomioP::numero_terminos(){
+	return Nterminos;
+}
+
+
+
+int PolinomioP::Exponente(int nroter){
+    NodoPoli* dir=Buscar_Exponente(nroter);
+	if (nroter!=NULL) {
+		return Ptr_Poli->Expo;
+	}
+	return NULL;
+}
+
+
+PolinomioP PolinomioP::Sumar(PolinomioP* p1, PolinomioP* p2){}
+PolinomioP PolinomioP::Restar(PolinomioP* p1, PolinomioP* p2){}
+PolinomioP PolinomioP::Multiplicar(PolinomioP* p1, PolinomioP* p2){}
+
+
+void PolinomioP::suprime(NodoPoli* dir){
+	if (dir==Ptr_Poli) {
+		Ptr_Poli=Ptr_Poli->sig;
+	} else{
+		NodoPoli* aux=Ptr_Poli;
+		NodoPoli* ant=NULL;
+		while (aux!=NULL && ant !=dir){  // aqui ubica el nodo
+			ant=aux;
+			aux=aux->sig;
+		}
+		// aqui se elimina
+		NodoPoli* ante=ant;
+		ante->sig=aux->sig;
+		delete(aux);
+		Nterminos--;
+	}
+}
+
+
+NodoPoli* PolinomioP::Buscar_Exponente(int Exp){
+	NodoPoli* dir=Ptr_Poli;
+	if (dir!=NULL) {
+		NodoPoli *dirExp=NULL;
+		while ((dir!=NULL)&& (dirExp==NULL)){
+			if (dir->Expo==Exp) {
+				dirExp=dir;
+			}
+			dir=dir->sig;
+		}
+		return dirExp;
+	} else{
+		cout<<"No existe exponente\n";
+	}
+}
+NodoPoli* PolinomioP::Buscar_Termino(int n){
+	NodoPoli* dir=Ptr_Poli;
+	if (dir!=NULL) {
+		NodoPoli *dirTer=NULL;
+		int nt=0;
+		while ((dir!=NULL)&& (dirTer=NULL)){
+			nt=nt+1;
+			if (nt==n) {
+				dirTer=dir;
+			}
+			dir=dir->sig;
+		}
+		return dirTer;
+	} else{
+		cout<<"No existe exponente\n";
+	}
+}
+
+
+
+float PolinomioP::Evaluar(float x){
+	float suma=0;
+	for (int i=0; i < Nterminos; i++) {
+		int exponente=Exponente(i+1);
+		int Coeficiente=coeficiente(exponente);
+		suma=suma + Coeficiente*pow (x,exponente);
+	}
+	return suma;
+}
+
+
+
+string PolinomioP::Mostrar(){
+	string s="";
+	int n=numero_terminos();
+	for (int i=1; i <=n; i++) {
+		int exp=Exponente(i);
+		int coef=coeficiente(exp);
+		if (coef>0) {
+			s=s+"+";
+		} else{
+			s=s+"-";
+		}
+		s=s+to_string(coef)+"x"+to_string(exp);
+	}
+	return s;
+}
+
+
+
+void PolinomioP::derivada(PolinomioP* p){
+	for (int i=0; i < Nterminos; i++) {
+		int exp=Exponente(i+1);
+		int coef=coeficiente(exp);
+		p->Poner_termino(coef*exp,exp-1);
+	}
+}

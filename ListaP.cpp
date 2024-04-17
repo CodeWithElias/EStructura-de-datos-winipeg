@@ -1,0 +1,184 @@
+//---------------------------------------------------------------------------
+
+#pragma hdrstop
+#include "ListaP.h"
+//---------------------------------------------------------------------------
+#pragma package(smart_init)
+
+ListaP::ListaP(){
+	PtrElemento=NULL;
+	longi=0;
+}
+
+
+direccionP ListaP::fin(){
+	if (vacio()) {
+		//cout<<"ERROR/fin: Lista vacia\n";
+	} else{
+		direccionP z=PtrElemento;
+		direccionP ptrfin;
+		while (z!=NULL){
+			ptrfin=z;
+			z= z->sig;
+		}
+		return ptrfin;
+	}
+	return 0;
+}
+
+
+direccionP ListaP::primero(){
+	if (!vacio()) {
+		return PtrElemento;
+	} else{
+		//cout<<"ERROR/primero: Lista vacia\n";
+
+	}
+	return 0;
+}
+
+
+direccionP ListaP::siguiente(direccionP d){
+	if (vacio()) {
+		//cout<<"ERROR/siguiente: Lista vacia\n";
+	} else{
+		if (d==fin()) {
+			//cout<<"ERROR/siguiente: Direccion erronea\n";
+		}
+		return d->sig;
+	}
+	return 0;
+}
+
+
+direccionP ListaP::anterior(direccionP d){
+	if (vacio()) {
+		//cout<<"ERROR/anterior: Lista vacia\n";
+	} else{
+		direccionP x=PtrElemento;
+		direccionP ant=NULL;
+		while (x!=NULL){
+			if (x==d) {
+				return ant;
+			}
+			ant=x;
+			x=x->sig;
+		}
+		return NULL;
+	}
+}
+
+
+bool ListaP::vacio(){
+return (longi==0);
+}
+
+
+int ListaP::recupera(direccionP d){
+	if (vacio()) {
+		//cout<<"ERROR/anterior: Lista vacia\n";
+	} else{
+		return d->elemento;
+	}
+}
+
+
+int ListaP::Longitud(){
+	return longi;
+}
+
+
+void ListaP::insertar(direccionP d, int elem){
+	NodoL* x=new NodoL;
+	if (x!=NULL) {
+		x->elemento=elem;
+		x->sig=NULL;
+		if (vacio()) {
+			PtrElemento=x;
+			longi=1;
+		} else{
+			longi++;
+			if (d==primero()) {
+				x->sig=d;
+				PtrElemento=x;
+			} else{
+				direccionP ant=anterior(d);
+				ant ->sig=x;
+				x->sig=d;
+			}
+		}
+	}
+}
+
+
+
+void ListaP::insertar_primero(int elem){
+	NodoL* x=new NodoL;
+	if (x!=NULL) {
+		x->elemento=elem;
+		x->sig=PtrElemento;
+		longi++;
+		PtrElemento=x;
+	}
+}
+
+
+void ListaP::insertar_ultimo(int elem){
+	NodoL* x=new NodoL;
+	if (x!=NULL) {
+		x->elemento=elem;
+		x->sig=NULL;
+		if (longi!=0) {
+			fin()->sig=x;
+		} else {
+			PtrElemento=x;
+		}
+		longi++;
+	} else {
+		//cout<<"ERROR: NO EXISTE ESPACIO EN LA MEMORIA\n";
+	}
+}
+
+
+void ListaP::suprime(direccionP d){
+	if (longi==0) {
+		//cout<<"ERROR: LISTA VACIA\n";
+		return;
+	} else{
+		if (d==PtrElemento) {
+			direccionP x=PtrElemento;
+			PtrElemento=PtrElemento->sig;
+			delete (d);
+		} else{
+			direccionP ant=anterior(d);
+			ant->sig=siguiente(d);
+			delete (d);
+
+		}
+	}
+	longi --;
+}
+
+
+void ListaP::modifica(direccionP d, int elem){
+	if (vacio()) {
+		//cout<<"ERROR: LISTA VACIA\n";
+	} else{
+		d->elemento=elem;
+	}
+}
+
+string ListaP::tostr(){
+	string s="<";
+	direccionP aux=PtrElemento;
+	while (aux!=NULL){
+		int elemento=aux->elemento;
+		s=s+to_string(elemento);
+		aux=aux->sig;
+		if (aux!=NULL) {
+			s=s+",";
+		}
+	}
+	return s+">";
+}
+

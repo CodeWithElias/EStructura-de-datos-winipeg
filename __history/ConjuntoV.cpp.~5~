@@ -1,0 +1,181 @@
+//---------------------------------------------------------------------------
+
+#pragma hdrstop
+
+#include "ConjuntoV.h"
+//---------------------------------------------------------------------------
+#pragma package(smart_init)
+
+
+ConjuntoV::ConjuntoV(){
+	vec =new int [Maxc];
+	for (int i =0; i < Maxc; i++) {
+		vec[i]=0;
+	}
+}
+
+
+
+bool ConjuntoV::vacio(){
+	return cant==0;
+}
+
+
+
+int ConjuntoV::cardinal(){
+	return cant;
+}
+
+
+
+int ConjuntoV::ordinal(int e){
+	if (e>0 && e<=Maxc) {
+		int res=0;
+		for (int i =0 ; i < Maxc; i++) {
+			if (vec[i]!=0) {
+				res++;
+				if (e==i) {
+					return res;
+				}
+			}
+		}
+	}
+}
+
+
+
+void ConjuntoV::inserta(int e){
+	if (e>0 && e<=Maxc) {
+		if (!pertenece(e)) {
+			vec[e-1]=1;
+			cant++;
+		}
+	}
+}
+
+
+
+void ConjuntoV::suprime(int e){
+	if (e>0 && e<=Maxc) {
+		if (pertenece(e)) {
+			vec[e-1]=0;
+			cant--;
+		}
+	}
+}
+
+
+
+bool ConjuntoV::pertenece(int e){
+	if (e>0 && e<=Maxc) {
+		return vec[e-1];
+	}
+	return false;
+}
+
+
+// DEVUELDE UN ELEMENTO DE MANERA ALEATORIA
+int ConjuntoV::muestrea(){
+	if (!vacio()) {
+		int pos= rand()%cant+1;
+		return elemento(pos);
+	}  else{
+		return 0;
+	}
+}
+
+
+
+int ConjuntoV::elemento(int pos){
+	int c=0;
+	for (int i = 0; i < Maxc; i++) {
+		if (vec[i]==true) {
+			c++;
+			if (c==pos) {
+				return i+1;
+			}
+		}
+	}
+	return 0;
+}
+
+
+
+string ConjuntoV::tostr(){
+	string r="{";
+	for (int i = 0; i < cant ; i++) {
+		r +=to_string(elemento(i+1));    // to_string(cnvierte de numero a cadena
+		if (i<cant-1) {
+			r +=",";
+		}
+	}
+	r +="}";
+	return r;
+}
+
+
+
+void ConjuntoV::unir(ConjuntoV * b, ConjuntoV* c){
+	c->reiniciar();
+	ConjuntoV* aux= new ConjuntoV();
+	ConjuntoV* a= this;
+	// para insertar A en C
+	while (a->vacio()==false){
+		int r=a->muestrea();
+		c->inserta(r);
+		a->suprime(r);
+		aux->inserta(r);
+	}
+	// para recuperar los datos de A
+	while (aux->vacio()==false){
+		int r=aux->muestrea();
+		aux->suprime(r);
+		a->inserta(r);
+	}
+	// para insertar B en C
+		while (b->vacio()==false){
+		int r=b->muestrea();
+		c->inserta(r);
+		b->suprime(r);
+		aux->inserta(r);
+	}
+	// para recuperar los datos de B
+	while (aux->vacio()==false){
+		int r=aux->muestrea();
+		aux->suprime(r);
+		b->inserta(r);
+	}
+}
+
+
+
+
+void ConjuntoV::intercectar(ConjuntoV * b, ConjuntoV* c){
+	c->reiniciar();
+	ConjuntoV* a=this;
+	ConjuntoV* aux= new ConjuntoV();
+	// inserto si el elemento pertenece a A y B
+	while (a->vacio()==false){
+		int r=a->muestrea();
+		if (a->pertenece(r) && b->pertenece(r)) {
+			c->inserta(r);
+		}
+		a->suprime(r);
+		aux->inserta(r);
+	}
+	// recupero los elementos de A
+	while (aux->vacio()==false){
+		int r=aux->muestrea();
+		aux->suprime(r);
+		a->inserta(r);
+	}
+}
+
+
+
+void ConjuntoV::reiniciar(){
+	while (vacio()==false){
+		int r=muestrea();
+		suprime(r);
+	}
+}

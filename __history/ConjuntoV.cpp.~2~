@@ -1,0 +1,99 @@
+//---------------------------------------------------------------------------
+
+#pragma hdrstop
+
+#include "ConjuntoV.h"
+//---------------------------------------------------------------------------
+#pragma package(smart_init)
+
+
+ConjuntoV::ConjuntoV(){
+	vec =new short [Max];
+	for (int i =1; i <=Max; i++) {
+		vec[i]=0;
+	}
+}
+
+
+
+bool ConjuntoV::vacio(){
+	return cant==0;
+}
+
+
+
+int ConjuntoV::cardinal(){
+	return cant;
+}
+
+
+
+int ConjuntoV::ordinal(int e){
+	if (e>0 && e<=Max) {
+		int res=0;
+		for (int i = 1; i <= Max; i++) {
+			if (vec[i]!=0) {
+				res++;
+				if (e==i) {
+					return res;
+				}
+			}
+		}
+	}
+	return res;
+}
+
+
+
+void ConjuntoV::inserta(int e){
+	if (e>0 && e<=Max) {
+		if (!pertenece(e)) {
+			vec[e]=1;
+			cant++;
+		}
+	}
+}
+
+
+
+void ConjuntoV::suprime(int e){
+	if (e>0 && e<=Max) {
+		if (pertenece(e)) {
+			vec[e]=0;
+			cant--;
+		}
+	}
+}
+
+
+
+bool ConjuntoV::pertenece(int e){
+	if (e>0 && e<=Max) {
+		return vec[e];
+	}
+	return false;
+}
+
+
+
+int ConjuntoV::muestrea(){
+	if (!vacio()) {
+		int pos= rand()%cant;
+		return elemento(pos);
+	}  else{
+		return 0;
+    }
+}
+
+
+
+int ConjuntoV::elemento(int pos){
+	int c=0;
+	for (int i = 1; i <= Max; i++) {
+		c++;
+		if (c==pos) {
+			return i;
+		}
+	}
+	return 0;
+}

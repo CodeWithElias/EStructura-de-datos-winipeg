@@ -1,0 +1,1651 @@
+﻿#include <iostream>
+#include <string>
+#include <locale>
+#include "UMemoria.h"
+
+#include "ListaM.h"
+#include "ListaP.h"
+#include "ListaV.h"
+
+#include "PolinomioV.h"
+#include "PolinomioM.h"
+#include "PolinomioP.h"
+#include "PolinomioLM.h"
+#include "PolinomioM.h"
+#include "PolinomioV2.h"
+#include "PolinomioLP.h"
+
+#include "ConjuntoV.h"
+#include "ConjuntoL.h"
+#include "ConjuntoP.h"
+#include "ConjuntoL.h"
+#include "ConjuntoM.h"
+
+
+#include "MatrizLM.h"
+#include "MatrizV.h"
+#include "MatrizVC.h"
+#include "MatrizM.h"
+#include "MatrizP.h"
+#include "MatrizPD.h"
+#include "MatrizMD.h"
+
+
+#include "PilaM.h"
+
+
+#include "ColaL.h"
+#include "ColaM.h"
+
+/*----------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------*/
+
+using namespace std;
+
+
+	void menu();                      // funciona
+
+	void menu_ListaV();               // funciona
+	void menu_ListaP();               // funciona
+
+
+
+	void PolinomioPtr();              // funciona
+	void menu_PolinomioVec();         // funciona
+	void menu_PolinomioLisMen();      // funciona
+	void PolinomioMem();              // funciona
+	void PolinomioV2();               // funciona
+	void PolinomioLisPtr();           // funciona
+
+
+
+	void menu_conjuntoPtr();          // funciona
+	void ConjuntoLis();               // funciona
+	void menu_ConjuntoMen();          // funciona
+
+
+
+
+	void menu_matriz_lis_mem();       // reparar codigo todo
+	void menu_matriz_Vec();           // funciona
+	void menu_matriz_Vec_Fil();       // funciona
+	void menu_matriz_mem();           // funciona
+	void menu_matriz_ptr();           // funciona
+	void menu_matriz_ptr_dobl();      // funciona
+	void menu_matriz_mem_dobl();      // funciona
+
+
+
+	void menu_pila_mem();             // funciona
+
+
+
+	void menu_cola_lis();             // funciona
+	void menu_cola_mem();             // funciona
+
+
+
+
+/*----------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------*/
+
+	// procedimiento para encontrar el punto maximo de un polinomio
+	void punto_max(PolinomioP* p, int a, int b, float desplazamiento);
+
+	  // funcion para saber si una matriz es simetrica o no
+	bool es_simetrica(MatrizL * m);
+
+	   // procedimineto para casar la transpuesta de un matriz
+	MatrizL* transpuesta(MatrizL * m);
+
+
+	  // procedimiento para intercambiar tope de dos pilas
+	void intercambiar_top(PilaS* a, PilaS* b);
+
+/*----------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------*/
+
+
+int main(){
+
+	//menu(); // menu de la memorioa y la lista
+
+
+			// MENU LISTA
+
+	//menu_ListaP(); // menu de la lista puntero
+	//menu_ListaV();// menu lista con vector
+
+		// MENU POLINOMIO
+
+	//menu_PolinomioVec();
+	//menu_PolinomioLisMen();
+	//PolinomioMem();
+	//PolinomioPtr(); // menu del polinomio puntero
+	//PolinomioV2();
+	//PolinomioLisPtr();
+
+
+
+		// MENU CONJUNTO
+
+	//menu_conjuntoPtr();
+	//ConjuntoLis();  // menu del conjunto lista
+	//menu_ConjuntoMen();
+
+
+		// MENU MATRIZ
+	//menu_matriz_lis_mem();
+	//menu_matriz_Vec();
+	//menu_matriz_Vec_Fil();
+	//menu_matriz_mem();
+	//menu_matriz_ptr();
+	//menu_matriz_ptr_dobl();
+	//menu_matriz_mem_dobl();
+
+
+	   // MENU PILA
+	//menu_pila_mem();
+
+
+
+	   // MENU COLA
+	//menu_cola_lis();
+	menu_cola_mem();
+
+
+
+	system ("pause\n");
+	return 0;
+}
+
+
+/*----------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------*/
+
+void punto_max(PolinomioP* p, int a, int b, float desplazamiento){
+	float max_x=a;
+	float max_y=p->Evaluar(a);
+	for (float x=a; x <= b; x= x+desplazamiento) {
+		float y=p->Evaluar(x);
+		if (y>max_y) {
+			max_x=x;
+			max_y=y;
+		}
+	}
+	cout<<"("+to_string(max_x)+ "," +to_string(max_y)+")\n";
+}
+
+/*----------------------------------------------------------------------------*/
+
+bool es_simetrica(MatrizL * m) {
+	int f = m->dimension_fila();
+	int c = m->dimension_columna();
+	if (f == c) {
+		for (int i = 1; i <= f; i++) {
+			for (int j = 1; j <= c; j++) {
+				if (m->elemento(i, j) != m->elemento(j, i))
+					return false;
+			}
+		}
+		return true;
+	}
+	return false;
+}
+
+ /*----------------------------------------------------------------------------*/
+
+MatrizL* transpuesta(MatrizL * m) {
+	MatrizL* trans = new MatrizL();
+	int f = m->dimension_fila();
+	int c = m->dimension_columna();
+	trans->dimensionar(c, f);
+	for (int i = 1; i <= f; i++) {
+		for (int j = 1; j <= c; j++) {
+			trans->poner(j, i, m->elemento(i, j));
+		}
+	}
+	return trans;
+}
+
+
+/*----------------------------------------------------------------------------*/
+
+void intercambiar_top(PilaS* a, PilaS* b){
+
+	if (!a->vacia() && !b->vacia()) {
+		int x;
+		a->sacar(x);
+		int y;
+		b->sacar(y);
+
+		a->meter(y);
+		b->meter(x);
+	}
+
+}
+
+
+
+/*----------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------*/
+
+
+
+
+	// MENU MENORIA Y LISTA-MEMORIA
+void menu(){
+	ListaM *list;
+	CSMemoria *mem;
+	int opcion;
+	do {
+		cout << "1.CREAR MEMORIA\n";
+		cout << "2.PEDIR ESPACIO\n";
+		cout << "3.CREAR LISTA\n";
+		cout << "4.MOSTRAR MEMORIA\n";
+		cout << "5.MOSTRAR LISTA\n";
+		cout << "6.INSERTAR DIR PRIMERO \n L.INSERTAR(L,PRIMERO,DATO)\n";
+		cout << "7.INSERTAR DIR FIN\n";
+		cout << "8.INSERTAR SIGUIENTE DIR PRIMERO\n L.INSERTAR(L,SIGUIENTE,DATO)\n";
+		cout << "9.ELIMINAR ANTERIOR FIN\n";
+		cout << "10.INSERTAR ANTERIOR FIN\n";
+		cout << "11.LIBERAR ESPACIO\n";
+		cout << "12.Salir\n";
+		cout << "Opcion: ";
+		cin >> opcion;
+		  switch (opcion) {
+			case 1: {
+					mem=new CSMemoria();
+					cout<<"MEMORIA CREADA"<<endl;
+					} break;
+			 case 2: {
+					string ids;
+					cout<<"IDS: ";
+					cin.ignore();
+					getline(cin,ids);
+					mem->new_espacio(ids);
+					} break;
+			case 3: {
+					list = new ListaM(mem);
+					} break;
+			case 4: {
+					mem->mostrar_memoria();
+
+					} break;
+			case 5: {
+					cout << list->to_str() << endl;
+					} break;
+			case 6: {
+					int e;
+					cout << "Dato: ";
+					cin >> e;
+					list->inserta_primero(e);
+					} break;
+			case 7: {
+					int e;
+					cout << "Dato: ";
+					cin >> e;
+					list->inserta_ultimo(e);
+					} break;
+			case 8: {
+					int e;
+					cout << "Dato: ";
+					cin >> e;
+					list->inserta(list->siguiente(list->primero()),e);
+					} break;
+			case 9: {
+					list->suprime(list->anterior(list->fin()));
+					} break;
+			case 10:{
+					int x;
+					cout << "Dato: ";
+					cin >> x;
+					list->inserta(list->anterior(list->fin()),x);
+					} break;
+			case 11:{
+					int x;
+					cout << "Dato: ";
+					cin >> x;
+					mem->Delete_espacio(x);
+					}break;
+		  }
+		  system ("pause\n");
+		  system("cls");
+
+	}while (opcion!=12);
+}
+
+/*----------------------------------------------------------------------------*/
+
+  // MENU LISTA CON VECTORES     //// completar el menu
+void menu_ListaV(){
+	ListaV* lis;
+
+		int opcion;
+	do {
+		cout << "1.CREAR LISTA\n";
+		cout << "2.MOSTRAR LISTA\n";
+		cout << "3.INSERTAR DIR PRIMERO \n L.INSERTAR(L,PRIMERO,DATO)\n";
+		cout << "4.INSERTAR DIR FIN\n";
+		cout << "5.INSERTAR SIGUIENTE DIR PRIMERO\n L.INSERTAR(L,SIGUIENTE,DATO)\n";
+		cout << "6.ELIMINAR ANTERIOR FIN\n";
+		cout << "7.INSERTAR ANTERIOR FIN\n";
+		cout << "8.Salir\n";
+		cout << "Opcion: ";
+		cin >> opcion;
+		  switch (opcion) {
+			case 1: {
+					lis = new ListaV;
+					} break;
+			case 2: {
+					cout << lis->to_str() << endl;
+					} break;
+			case 3: {
+					int e;
+					cout << "Dato: ";
+					cin >> e;
+					lis->inserta_primero(e);
+					} break;
+			case 4: {
+					int e;
+					cout << "Dato: ";
+					cin >> e;
+					lis->inserta_ultimo(e);
+					} break;
+			case 5: {
+					int e;
+					cout << "Dato: ";
+					cin >> e;
+					lis->inserta(lis->siguiente(lis->primero()),e);
+					} break;
+			case 6: {
+					lis->suprime(lis->anterior(lis->fin())); // en observacion
+					} break;
+			case 7: {
+					int x;
+					cout << "Dato: ";
+					cin >> x;
+					lis->inserta(lis->anterior(lis->fin()),x);
+					} break;
+		  }
+			system ("pause\n");
+			system("cls");
+	}while (opcion!=8);
+
+}
+
+/*----------------------------------------------------------------------------*/
+
+//MENU DE LA LISTA CON PUNTERO
+void menu_ListaP(){
+	ListaP* lis;
+
+		int opcion;
+	do {
+		cout << "1.CREAR LISTA\n";
+		cout << "2.MOSTRAR LISTA\n";
+		cout << "3.INSERTAR DIR PRIMERO \n L.INSERTAR(L,PRIMERO,DATO)\n";
+		cout << "4.INSERTAR DIR FIN\n";
+		cout << "5.INSERTAR SIGUIENTE DIR PRIMERO\n L.INSERTAR(L,SIGUIENTE,DATO)\n";
+		cout << "6.ELIMINAR ANTERIOR FIN\n";
+		cout << "7.INSERTAR ANTERIOR FIN\n";
+		cout << "8.Salir\n";
+		cout << "Opcion: ";
+		cin >> opcion;
+		  switch (opcion) {
+			case 1: {
+					lis = new ListaP;
+					} break;
+			case 2: {
+					cout << lis->tostr() << endl;
+					} break;
+			case 3: {
+					int e;
+					cout << "Dato: ";
+					cin >> e;
+					lis->insertar_primero(e);
+					} break;
+			case 4: {
+					int e;
+					cout << "Dato: ";
+					cin >> e;
+					lis->insertar_ultimo(e);
+					} break;
+			case 5: {
+					int e;
+					cout << "Dato: ";
+					cin >> e;
+					lis->insertar(lis->siguiente(lis->primero()),e);
+					} break;
+			case 6: {
+					lis->suprime(lis->anterior(lis->fin()));
+					} break;
+			case 7: {
+					int x;
+					cout << "Dato: ";
+					cin >> x;
+					lis->insertar(lis->anterior(lis->fin()),x);
+					} break;
+		  }
+			system ("pause\n");
+			system("cls");
+	}while (opcion!=8);
+}
+
+/*----------------------------------------------------------------------------*/
+
+// MENU CONJUNTO CON LISTA PUNTERO
+void ConjuntoLis(){
+
+	ConjuntoL* a;
+	ConjuntoL* b;
+	ConjuntoL* c;
+
+		int opcion;
+	do {
+		cout << "1.CREAR CONJUNTO A\n";
+		cout << "2.CREAR CONJUNTO B\n";
+		cout << "3.CREAR CONJUNTO C\n";
+		cout << "4.INSERTAR ELEMENTO\n";
+		cout << "5.MOSTRAR CONJUNTO\n";
+		cout << "6.UNION DE CONJUNTO A Y B\n";
+		cout << "7.INTERCECCION DE CONJUNTO A Y B\n";
+		cout << "8.Salir\n";
+		cout << "Opcion: ";
+		cin >> opcion;
+		  switch (opcion) {
+			case 1: {
+					a=new ConjuntoL();
+					} break;
+			case 2: {
+					b=new ConjuntoL();
+					} break;
+			case 3: {
+					c=new ConjuntoL();
+					} break;
+			case 4: {
+					int e;
+					cout << "Dato: ";
+					cin >> e;
+
+					int conj;
+					cout << "Escriva 1 para conjunto A:  \n";
+					cout << "Escriva 2 para conjunto B:  \n";
+					cout << "Escriva 3 para conjunto C:  \n";
+					cin >> conj;
+
+					if (conj==1) {
+						a->inserta(e);
+					} else if (conj==2) {
+								b->inserta(e);
+						   } else if (conj==3) {
+										c->inserta(e);
+								  }
+					} break;
+			case 5: {
+
+					int conj;
+					cout << "Escriva 1 para conjunto A:  \n";
+					cout << "Escriva 2 para conjunto B:  \n";
+					cout << "Escriva 3 para conjunto C:  \n";
+					cin >> conj;
+
+					if (conj==1) {
+						cout<<a->to_str()<<endl;
+					} else if (conj==2) {
+								cout<<b->to_str()<<endl;
+						   } else if (conj==3) {
+										cout<<c->to_str()<<endl;
+								  }
+					} break;
+			case 6: {
+					a->unir(b,c);
+					} break;
+			case 7: {
+					a->intercectar(b,c);
+					} break;
+		  }
+		  //system("cls");  // limpia la consola
+			system ("pause\n");
+			system("cls");
+	}while (opcion!=8);
+}
+
+/*----------------------------------------------------------------------------*/
+
+// MENU POLINOMIO CON PUNTERO
+void PolinomioPtr(){
+
+	PolinomioP* pol;
+
+		int opcion;
+	do {
+		cout << "1.CREAR POLINOMIO\n";
+		cout << "2.PONER TERMINO\n";
+		cout << "3.MOSTRAR POLINOMIO\n";
+		cout << "4.ENCONTRAR COORDENADA MAXIMA\n";
+		cout << "5.SALIR\n";
+		cout << "Opcion: ";
+		cin >> opcion;
+		  switch (opcion) {
+			case 1: {
+					pol = new PolinomioP();
+					} break;
+			case 2: {
+					int c;
+					cout << "Coeficiente: ";
+					cin >> c;
+					int e;
+					cout << "Exponente: ";
+					cin >> e;
+					pol->Poner_termino(c,e);
+					} break;
+			case 3: {
+					int e;
+					cout << pol->Mostrar()<<endl;
+					} break;
+			case 4: {
+					int a;
+					cout << "Ingrese el punto A: ";
+					cin >> a;
+
+					int b;
+					cout << "Ingrese el punto B: ";
+					cin >> b;
+
+					float des;
+					cout << "Ingrese el desplazamiento: ";
+					cin >> des;
+					punto_max(pol, a , b , des);
+
+					} break;
+		  }
+			system ("pause\n");
+
+			system("cls");
+	}while (opcion!=5);
+}
+
+
+/*----------------------------------------------------------------------------*/
+
+// MENU CONJUNTO CON PUNTEROS
+void menu_conjuntoPtr(){
+	ConjuntoPtr* a;
+	ConjuntoPtr* b;
+	ConjuntoPtr* c;
+
+		int opcion;
+	do {
+		cout << "1.CREAR CONJUNTO A\n";
+		cout << "2.CREAR CONJUNTO B\n";
+		cout << "3.CREAR CONJUNTO C\n";
+		cout << "4.INSERTAR ELEMENTO\n";
+		cout << "5.MOSTRAR CONJUNTO\n";
+		cout << "6.UNION DE CONJUNTO A Y B\n";
+		cout << "7.INTERCECCION DE CONJUNTO A Y B\n";
+		cout << "8.Salir\n";
+		cout << "Opcion: ";
+		cin >> opcion;
+		  switch (opcion) {
+			case 1: {
+					a=new ConjuntoPtr();
+					} break;
+			case 2: {
+					b=new ConjuntoPtr();
+					} break;
+			case 3: {
+					c=new ConjuntoPtr();
+					} break;
+			case 4: {
+					int e;
+					cout << "Dato: ";
+					cin >> e;
+
+					int conj;
+					cout << "Escriva 1 para conjunto A:  \n";
+					cout << "Escriva 2 para conjunto B:  \n";
+					cout << "Escriva 3 para conjunto C:  \n";
+					cin >> conj;
+
+					if (conj==1) {
+						a->inserta(e);
+					} else if (conj==2) {
+								b->inserta(e);
+						   } else if (conj==3) {
+										c->inserta(e);
+								  }
+					} break;
+			case 5: {
+
+					int conj;
+					cout << "Escriva 1 para conjunto A:  \n";
+					cout << "Escriva 2 para conjunto B:  \n";
+					cout << "Escriva 3 para conjunto C:  \n";
+					cin >> conj;
+
+					if (conj==1) {
+						cout<<a->toStr()<<endl;
+					} else if (conj==2) {
+								cout<<b->toStr()<<endl;
+						   } else if (conj==3) {
+										cout<<c->toStr()<<endl;
+								  }
+					} break;
+			case 6: {
+					a->unir(b,c);
+					} break;
+			case 7: {
+					a->interseccion(a,b,c);
+					} break;
+		  }
+		  //system("cls");  // limpia la consola
+			system ("pause\n");
+			system("cls");
+	}while (opcion!=8);
+}
+
+
+/*----------------------------------------------------------------------------*/
+
+	// MENU POLINOMIO VECTOR
+void menu_PolinomioVec(){
+	PolinomioV* p=new PolinomioV();
+	PolinomioV* p1=new PolinomioV();
+	PolinomioV* p2=new PolinomioV();
+
+	p->Poner_Termino(-3,2);
+	p1->Poner_Termino(5,2);
+	p2->sumar(p,p1,p2);
+
+	cout << p2->to_str()<< endl;
+
+}
+
+
+/*----------------------------------------------------------------------------*/
+
+		 // MENU CONJUNTO MEMORIA
+void menu_ConjuntoMen(){
+
+	CSMemoria *mem;
+	ConjuntoS* a;
+	ConjuntoS* b;
+	ConjuntoS* c;
+
+		int opcion;
+	do {
+		cout << "1.CREAR CONJUNTO A\n";
+		cout << "2.CREAR CONJUNTO B\n";
+		cout << "3.CREAR CONJUNTO C\n";
+		cout << "4.CREAR MEMORIA\n";
+		cout << "5.INSERTAR ELEMENTO\n";
+		cout << "6.MOSTRAR CONJUNTO\n";
+		cout << "7.UNION DE CONJUNTO A Y B\n";
+		cout << "8.INTERCECCION DE CONJUNTO A Y B\n";
+		cout << "9.MOSTRAR MEMORIA\n";
+		cout << "10.Salir\n";
+		cout << "Opcion: ";
+		cin >> opcion;
+		  switch (opcion) {
+			case 1: {
+					a=new ConjuntoS(mem);
+					} break;
+			case 2: {
+					b=new ConjuntoS(mem);
+					} break;
+			case 3: {
+					c=new ConjuntoS(mem);
+					} break;
+			case 4: {
+					mem=new CSMemoria();
+					cout<<"MEMORIA CREADA"<<endl;
+					} break;
+			case 5: {
+					int e;
+					cout << "Dato: ";
+					cin >> e;
+
+					int conj;
+					cout << "Escriva 1 para conjunto A:  \n";
+					cout << "Escriva 2 para conjunto B:  \n";
+					cout << "Escriva 3 para conjunto C:  \n";
+					cin >> conj;
+
+					if (conj==1) {
+						a->inserta(e);
+					} else if (conj==2) {
+								b->inserta(e);
+						   } else if (conj==3) {
+										c->inserta(e);
+								  }
+					} break;
+			case 6: {
+
+					int conj;
+					cout << "Escriva 1 para conjunto A:  \n";
+					cout << "Escriva 2 para conjunto B:  \n";
+					cout << "Escriva 3 para conjunto C:  \n";
+					cin >> conj;
+
+					if (conj==1) {
+						cout<<a->to_str()<<endl;
+					} else if (conj==2) {
+								cout<<b->to_str()<<endl;
+						   } else if (conj==3) {
+										cout<<c->to_str()<<endl;
+								  }
+					} break;
+			case 7: {
+					//a->unionC(a,b,c);
+					} break;
+			case 8: {
+					//a->interseccion(a,b,c);
+					} break;
+			case 9: {
+					mem->mostrar_memoria();
+					} break;
+		  }
+		  //system("cls");  // limpia la consola
+			system ("pause\n");
+			system("cls");
+	}while (opcion!=10);
+
+
+}
+
+/*----------------------------------------------------------------------------*/
+
+
+		  // MENU POLINOMIO LISTA MEMORIA
+void menu_PolinomioLisMen(){
+	PolinomioLM* p=new PolinomioLM();
+	PolinomioLM* p1=new PolinomioLM();
+	PolinomioLM* p2=new PolinomioLM();
+
+	p->Poner_Termino(5,1);
+
+	p->Poner_Termino(-3,2);
+
+	p->Poner_Termino(5,5);
+
+	p1->Poner_Termino(8,2);
+
+	p1->Poner_Termino(2,1);
+
+	p2->sumar(p,p1,p2);
+	cout << p2->to_str()<< endl;
+
+}
+
+
+
+/*----------------------------------------------------------------------------*/
+
+
+		  // MENU POLINOMIO MEMORIA
+void PolinomioMem(){
+	CSMemoria* mem=new CSMemoria();
+
+	PolinomioM* p=new PolinomioM(mem);
+	PolinomioM* p1=new PolinomioM(mem);
+	PolinomioM* p2=new PolinomioM(mem);
+
+
+	p->Poner_Termino(5,1);
+
+	p->Poner_Termino(-3,2);
+
+	p1->Poner_Termino(5,5);
+
+	p1->Poner_Termino(8,2);
+
+	p->Poner_Termino(2,5);
+
+
+	p2->sumar(p,p1,p2);
+	cout << p2->to_str()<< endl;
+
+}
+
+/*----------------------------------------------------------------------------*/
+
+		// MENU POLINOMIO VRECTOR 2
+void PolinomioV2(){
+
+			// Crear una instancia de la clase PoliV
+	PoliV* polinomio=new PoliV();
+	int opcion;
+	do {
+		cout << "1.CREAR POLINOMIO\n";
+		cout << "2.PONER TERMINO\n";
+		cout << "3.GRADO\n";
+		cout << "4.DERIVADA\n";
+		cout << "5.MOSTRAR POLINOMIO\n";
+		cout << "6.MOSTRAR ATRIBUTOS\n";
+		cout << "Opcion: ";
+		cin >> opcion;
+		  switch (opcion) {
+			case 1: {
+					polinomio=new PoliV();
+					} break;
+			case 2: {
+					int c;
+					cout << "Coeficiente: ";
+					cin >> c;
+					int e;
+					cout << "Exponente: ";
+					cin >> e;
+					polinomio->poner_termino(c,e);
+					} break;
+			case 3: {
+					int e;
+					cout << polinomio->grado()<<endl;
+					} break;
+			case 4: {
+					polinomio->derivar2();
+					} break;
+
+			case 5:{
+				   cout <<polinomio->vectorToString() <<endl;
+
+					} break;
+			case 6:{
+					cout <<polinomio->to_str()<<endl;
+					cout <<polinomio->numero_terminos()<<endl;
+
+					} break;
+		}
+		system ("pause\n");
+		system("cls");
+	} while (opcion!=7);
+}
+
+
+
+/*----------------------------------------------------------------------------*/
+
+
+		   //MENU POLINOMIO LISTA PUNTERO
+void PolinomioLisPtr(){
+	PolinomioLP* poli=new PolinomioLP();
+
+	poli->poner_terminoEx(7,2);
+	poli->to_str();
+
+
+	poli->poner_terminoEx(5,4);
+	poli->to_str();
+
+
+	poli->poner_terminoEx(2,8);
+	poli->to_str();
+
+
+	poli->poner_terminoEx(9,3);
+	poli->to_str();
+
+
+	//cout <<
+	poli->to_str();
+	//<<endl;
+	cout <<poli->Numero_Terminos()<<endl;
+
+
+}
+
+/*----------------------------------------------------------------------------*/
+
+
+   // MENU MATRIZ LISTA CON MEMORIA
+
+ void menu_matriz_lis_mem(){
+
+
+	MatrizL* mlm;
+	CSMemoria* mem;
+
+	int opcion;
+	do {
+		cout << "1.CREAR MATRIZ\n";
+		cout << "2.DIMENCIONAR\n";
+		cout << "3.PONER ELEMENTO\n";
+		cout << "4.FILAS\n";
+		cout << "5.COLUMNAS\n";
+		cout << "6.ELEMENTO F.C\n";
+		cout << "7.VALOR REPETIDO\n";
+		cout << "8.MOSTRAR MATRIZ\n";
+		cout << "Opcion: ";
+		cin >> opcion;
+		  switch (opcion) {
+			case 1: {
+					mem= new CSMemoria();
+					mlm=new MatrizL();
+					} break;
+			case 2: {
+					int f;
+					cout << "Fila: ";
+					cin >> f;
+					int c;
+					cout << "Columna: ";
+					cin >> c;
+					mlm->dimensionar(f,c);
+					} break;
+			case 3: {
+					int f;
+					cout << "Fila: ";
+					cin >> f;
+					int c;
+					cout << "Columna: ";
+					cin >> c;
+					int e;
+					cout << "Elemento: ";
+					cin >> e;
+					mlm->poner(f,c,e);
+					} break;
+			case 4: {
+					cout << mlm->dimension_fila()<<endl;
+					} break;
+			case 5: {
+					cout << mlm->dimension_columna()<<endl;
+					} break;
+
+			case 6:{
+				   int f;
+					cout << "Fila: ";
+					cin >> f;
+					int c;
+					cout << "Columna : ";
+					cin >> c;
+					cout << mlm->elemento(f,c)<<endl;
+
+					} break;
+			case 7:{
+					int r;
+					cout << "Valor Repetido : ";
+					cin >> r;
+					mlm->definir_valor_repetido(r);
+					} break;
+			case 8:{
+					mlm->mostrar();
+					} break;
+		}
+		system ("pause\n");
+		system("cls");
+	} while (opcion!=9);
+ }
+
+
+
+/*----------------------------------------------------------------------------*/
+
+	 // MENU MATRIZ VECTOR
+void menu_matriz_Vec(){
+
+	MatrizV* mv;
+
+	int opcion;
+	do {
+		cout << "1.CREAR MATRIZ\n";
+		cout << "2.DIMENCIONAR\n";
+		cout << "3.PONER ELEMENTO\n";
+		cout << "4.FILAS\n";
+		cout << "5.COLUMNAS\n";
+		cout << "6.ELEMENTO F.C\n";
+		cout << "7.VALOR REPETIDO\n";
+		cout << "8.MOSTRAR MATRIZ\n";
+		cout << "Opcion: ";
+		cin >> opcion;
+		  switch (opcion) {
+			case 1: {
+					mv=new MatrizV();
+					} break;
+			case 2: {
+					int f;
+					cout << "Fila: ";
+					cin >> f;
+					int c;
+					cout << "Columna: ";
+					cin >> c;
+					mv->dimensionar(f,c);
+					} break;
+			case 3: {
+					int f;
+					cout << "Fila: ";
+					cin >> f;
+					int c;
+					cout << "Columna: ";
+					cin >> c;
+					int e;
+					cout << "Elemento: ";
+					cin >> e;
+					mv->poner(f,c,e);
+					} break;
+			case 4: {
+					cout << mv->dimension_fila()<<endl;
+					} break;
+			case 5: {
+					cout << mv->dimension_columna()<<endl;
+					} break;
+
+			case 6:{
+				   int f;
+					cout << "Fila: ";
+					cin >> f;
+					int c;
+					cout << "Columna : ";
+					cin >> c;
+					cout << mv->elemento(f,c)<<endl;
+
+					} break;
+			case 7:{
+					int r;
+					cout << "Valor Repetido : ";
+					cin >> r;
+					mv->definir_valor_repetido(r);
+					} break;
+			case 8:{
+					cout <<mv->to_str();
+					} break;
+		}
+		system ("pause\n");
+		system("cls");
+	} while (opcion!=9);
+
+}
+
+
+
+/*----------------------------------------------------------------------------*/
+
+	 // MENU MATRIZ VECTOR REDUCIENDO LA FILA
+void menu_matriz_Vec_Fil(){
+
+	MatrizVC* mv;
+
+	int opcion;
+	do {
+		cout << "1.CREAR MATRIZ\n";
+		cout << "2.DIMENCIONAR\n";
+		cout << "3.PONER ELEMENTO\n";
+		cout << "4.FILAS\n";
+		cout << "5.COLUMNAS\n";
+		cout << "6.ELEMENTO F.C\n";
+		cout << "7.VALOR REPETIDO\n";
+		cout << "8.MOSTRAR MATRIZ\n";
+		cout << "Opcion: ";
+		cin >> opcion;
+		  switch (opcion) {
+			case 1: {
+					mv=new MatrizVC();
+					} break;
+			case 2: {
+					int f;
+					cout << "Fila: ";
+					cin >> f;
+					int c;
+					cout << "Columna: ";
+					cin >> c;
+					mv->dimensionar(f,c);
+					} break;
+			case 3: {
+					int f;
+					cout << "Fila: ";
+					cin >> f;
+					int c;
+					cout << "Columna: ";
+					cin >> c;
+					int e;
+					cout << "Elemento: ";
+					cin >> e;
+					mv->poner(f,c,e);
+					} break;
+			case 4: {
+					cout << mv->dimension_fila()<<endl;
+					} break;
+			case 5: {
+					cout << mv->dimension_columna()<<endl;
+					} break;
+
+			case 6:{
+				   int f;
+					cout << "Fila: ";
+					cin >> f;
+					int c;
+					cout << "Columna : ";
+					cin >> c;
+					cout << mv->elemento(f,c)<<endl;
+
+					} break;
+			case 7:{
+					int r;
+					cout << "Valor Repetido : ";
+					cin >> r;
+					mv->definir_valor_repetido(r);
+					} break;
+			case 8:{
+					cout << mv->to_str() << endl;
+					} break;
+		}
+		system ("pause\n");
+		system("cls");
+	} while (opcion!=9);
+
+}
+
+
+
+
+/*----------------------------------------------------------------------------*/
+
+	 // MENU MATRIZ IMPLEMENTADO CON MEMORIA
+
+ void menu_matriz_mem(){
+
+	MatrizM* mm;
+	CSMemoria* mem;
+
+	int opcion;
+	do {
+		cout << "1.CREAR MATRIZ\n";
+		cout << "2.DIMENCIONAR\n";
+		cout << "3.PONER ELEMENTO\n";
+		cout << "4.FILAS\n";
+		cout << "5.COLUMNAS\n";
+		cout << "6.ELEMENTO F.C\n";
+		cout << "7.VALOR REPETIDO\n";
+		cout << "8.MOSTRAR MATRIZ\n";
+		cout << "Opcion: ";
+		cin >> opcion;
+		  switch (opcion) {
+			case 1: {
+					mem=new CSMemoria();
+					mm=new MatrizM(mem);
+					} break;
+			case 2: {
+					int f;
+					cout << "Fila: ";
+					cin >> f;
+					int c;
+					cout << "Columna: ";
+					cin >> c;
+					mm->dimensionar(f,c);
+					} break;
+			case 3: {
+					int f;
+					cout << "Fila: ";
+					cin >> f;
+					int c;
+					cout << "Columna: ";
+					cin >> c;
+					int e;
+					cout << "Elemento: ";
+					cin >> e;
+					mm->poner(f,c,e);
+					} break;
+			case 4: {
+					cout << mm->dimension_Fila()<<endl;
+					} break;
+			case 5: {
+					cout << mm->dimension_Columna()<<endl;
+					} break;
+
+			case 6:{
+				   int f;
+					cout << "Fila: ";
+					cin >> f;
+					int c;
+					cout << "Columna : ";
+					cin >> c;
+					cout << mm->elemento(f,c)<<endl;
+
+					} break;
+			case 7:{
+					int r;
+					cout << "Valor Repetido : ";
+					cin >> r;
+					mm->definir_valor_repetido(r);
+					} break;
+			case 8:{
+					mm->to_str();
+					} break;
+		}
+		system ("pause\n");
+		system("cls");
+	} while (opcion!=9);
+
+}
+
+
+
+/*----------------------------------------------------------------------------*/
+
+
+
+
+	 // MENU MATRIZ CON PUNTERO
+
+ void menu_matriz_ptr(){
+
+	MatrizPC* mp;
+
+	int opcion;
+	do {
+		cout << "1.CREAR MATRIZ\n";
+		cout << "2.DIMENCIONAR\n";
+		cout << "3.PONER ELEMENTO\n";
+		cout << "4.FILAS\n";
+		cout << "5.COLUMNAS\n";
+		cout << "6.ELEMENTO F.C\n";
+		cout << "7.VALOR REPETIDO\n";
+		cout << "8.MOSTRAR MATRIZ\n";
+		cout << "Opcion: ";
+		cin >> opcion;
+		  switch (opcion) {
+			case 1: {
+					mp=new MatrizPC();
+					} break;
+			case 2: {
+					int f;
+					cout << "Fila: ";
+					cin >> f;
+					int c;
+					cout << "Columna: ";
+					cin >> c;
+					mp->dimensionar(f,c);
+					} break;
+			case 3: {
+					int f;
+					cout << "Fila: ";
+					cin >> f;
+					int c;
+					cout << "Columna: ";
+					cin >> c;
+					int e;
+					cout << "Elemento: ";
+					cin >> e;
+					mp->poner(f,c,e);
+					} break;
+			case 4: {
+					cout << mp->dimension_fila()<<endl;
+					} break;
+			case 5: {
+					cout << mp->dimension_columna()<<endl;
+					} break;
+
+			case 6:{
+				   int f;
+					cout << "Fila: ";
+					cin >> f;
+					int c;
+					cout << "Columna : ";
+					cin >> c;
+					cout << mp->elemento(f,c)<<endl;
+
+					} break;
+			case 7:{
+					int r;
+					cout << "Valor Repetido : ";
+					cin >> r;
+					mp->definir_valor_repetido(r);
+					} break;
+			case 8:{
+					cout << mp->to_str() << endl;
+					} break;
+		}
+		system ("pause\n");
+		system("cls");
+	} while (opcion!=9);
+
+}
+
+
+
+/*----------------------------------------------------------------------------*/
+
+
+
+
+	 // MENU MATRIZ CON PUNTERO DOBLE
+
+ void menu_matriz_ptr_dobl(){
+
+	MatrizPD* mpd;
+
+	int opcion;
+	do {
+		cout << "1.CREAR MATRIZ\n";
+		cout << "2.DIMENCIONAR\n";
+		cout << "3.PONER ELEMENTO\n";
+		cout << "4.FILAS\n";
+		cout << "5.COLUMNAS\n";
+		cout << "6.ELEMENTO F.C\n";
+		cout << "7.VALOR REPETIDO\n";
+		cout << "8.MOSTRAR MATRIZ\n";
+		cout << "Opcion: ";
+		cin >> opcion;
+		  switch (opcion) {
+			case 1: {
+					mpd=new MatrizPD();
+					} break;
+			case 2: {
+					int f;
+					cout << "Fila: ";
+					cin >> f;
+					int c;
+					cout << "Columna: ";
+					cin >> c;
+					mpd->dimensionar(f,c);
+					} break;
+			case 3: {
+					int f;
+					cout << "Fila: ";
+					cin >> f;
+					int c;
+					cout << "Columna: ";
+					cin >> c;
+					int e;
+					cout << "Elemento: ";
+					cin >> e;
+					mpd->poner(f,c,e);
+					} break;
+			case 4: {
+					cout << mpd->dimension_fila()<<endl;
+					} break;
+			case 5: {
+					cout << mpd->dimension_columna()<<endl;
+					} break;
+
+			case 6:{
+				   int f;
+					cout << "Fila: ";
+					cin >> f;
+					int c;
+					cout << "Columna : ";
+					cin >> c;
+					cout << mpd->elemento(f,c)<<endl;
+
+					} break;
+			case 7:{
+					int r;
+					cout << "Valor Repetido : ";
+					cin >> r;
+					mpd->definir_valor_repetido(r);
+					} break;
+			case 8:{
+					cout << mpd->to_str() << endl;
+					} break;
+		}
+		system ("pause\n");
+		system("cls");
+	} while (opcion!=9);
+
+}
+
+
+
+
+/*----------------------------------------------------------------------------*/
+
+
+			 // MENU MATRIZ CON MEMORIA DOBLE
+void menu_matriz_mem_dobl(){
+
+	MatrizSmDb* mmd;
+	CSMemoria* mem;
+
+	int opcion;
+	do {
+		cout << "1.CREAR MATRIZ\n";
+		cout << "2.DIMENCIONAR\n";
+		cout << "3.PONER ELEMENTO\n";
+		cout << "4.FILAS\n";
+		cout << "5.COLUMNAS\n";
+		cout << "6.ELEMENTO F.C\n";
+		cout << "7.VALOR REPETIDO\n";
+		cout << "8.MOSTRAR MATRIZ\n";
+		cout << "Opcion: ";
+		cin >> opcion;
+		  switch (opcion) {
+			case 1: {
+					mem=new CSMemoria();
+					mmd=new MatrizSmDb(mem);
+					} break;
+			case 2: {
+					int f;
+					cout << "Fila: ";
+					cin >> f;
+					int c;
+					cout << "Columna: ";
+					cin >> c;
+					mmd->dimensionar(f,c);
+					} break;
+			case 3: {
+					int f;
+					cout << "Fila: ";
+					cin >> f;
+					int c;
+					cout << "Columna: ";
+					cin >> c;
+					int e;
+					cout << "Elemento: ";
+					cin >> e;
+					mmd->poner(f,c,e);
+					} break;
+			case 4: {
+					cout << mmd->dimension_fila()<<endl;
+					} break;
+			case 5: {
+					cout << mmd->dimension_columna()<<endl;
+					} break;
+
+			case 6:{
+				   int f;
+					cout << "Fila: ";
+					cin >> f;
+					int c;
+					cout << "Columna : ";
+					cin >> c;
+					cout << mmd->elemento(f,c)<<endl;
+
+					} break;
+			case 7:{
+					int r;
+					cout << "Valor Repetido : ";
+					cin >> r;
+					mmd->definir_valor_repetido(r);
+					} break;
+			case 8:{
+					cout << mmd->toStr() << endl;
+					} break;
+		}
+		system ("pause\n");
+		system("cls");
+	} while (opcion!=9);
+
+}
+
+
+
+/*----------------------------------------------------------------------------*/
+
+
+		  // MENU PILA CON MEMORIA
+void menu_pila_mem(){
+
+	PilaS* pm1;
+	PilaS* pm2;
+	CSMemoria* mem;
+
+	int opcion;
+	do {
+		cout << "1.CREAR MEMORIA\n";
+		cout << "2.PEDIR ESPACIO\n";
+		cout << "3.CREAR PILA a\n";
+		cout << "4.CREAR PILA b\n";
+		cout << "5.INTERCAMBIAR TOPE\n";
+		cout << "6.PONER PILA a\n";
+		cout << "7.PONER PILA b\n";
+		cout << "8.MOSTRAR MEMORIA\n";
+		cout << "Opcion: ";
+		cin >> opcion;
+		  switch (opcion) {
+			case 1: {
+					mem=new CSMemoria();
+					} break;
+			case 2: {
+					string ids;
+					cout<<"IDS: ";
+					cin.ignore();
+					getline(cin,ids);
+					mem->new_espacio(ids);
+					} break;
+			case 3: {
+					pm1= new PilaS(mem);
+					} break;
+			case 4: {
+					pm2= new PilaS(mem);
+					} break;
+			case 5: {
+					intercambiar_top(pm1, pm2);
+					} break;
+			case 6: {
+					int e;
+					cout << "Elemento: ";
+					cin >> e;
+					pm1->meter(e);
+					} break;
+			case 7: {
+					int e;
+					cout << "Elemento: ";
+					cin >> e;
+					pm2->meter(e);
+
+					} break;
+			case 8: {
+					mem->mostrar_memoria();
+
+					/*cout << "Pila a: \n";
+					cout << pm1->to_str() << endl;
+
+					cout << "Pila b: \n";
+					cout << pm2->to_str() << endl;      */
+					}
+		  }
+		system ("pause\n");
+		system("cls");
+	} while (opcion!=9);
+}
+
+
+
+/*----------------------------------------------------------------------------*/
+
+	   // MENU COLA LISTA VECTOR
+void menu_cola_lis(){
+
+	ColaL* cl;
+
+	int opcion;
+	do {
+
+		cout << "1.CREAR COLA\n";
+		cout << "2.PONER ELEMENTO\n";
+		cout << "3.SACAR ELEMENTO\n";
+		cout << "4.PRIMER ELEMENTO\n";
+		cout << "5.MOSTRAR COLA\n";
+		cout << "6.SALIR\n";
+		cout << "Opcion: ";
+		cin >> opcion;
+		  switch (opcion) {
+			case 1: {
+					cl=new ColaL();
+					} break;
+			case 2: {
+					int e;
+					cout << "Elemento: ";
+					cin >> e;
+					cl->poner(e);
+					} break;
+			case 3: {
+					int e;
+					cl->sacar(e);
+					} break;
+			case 4: {
+					cout << cl->primero()<<endl;
+					} break;
+			case 5: {
+					cout << cl->to_str()<<endl;
+					} break;
+		}
+		system ("pause\n");
+		system("cls");
+	} while (opcion!=6);
+}
+
+
+
+/*----------------------------------------------------------------------------*/
+
+
+void menu_cola_mem(){
+	cout << "+----COLA MEMORIA----+\n";
+	ColaS* cm;
+	CSMemoria* mem;
+
+	int opcion;
+	do {
+
+		cout << "1.CREAR COLA\n";
+		cout << "2.PONER ELEMENTO\n";
+		cout << "3.SACAR ELEMENTO\n";
+		cout << "4.PRIMER ELEMENTO\n";
+		cout << "5.MOSTRAR COLA\n";
+		cout << "6.SALIR\n";
+		cout << "Opcion: ";
+		cin >> opcion;
+		  switch (opcion) {
+			case 1: {
+					mem = new CSMemoria();
+					cm=new ColaS(mem);
+					} break;
+			case 2: {
+					int e;
+					cout << "Elemento: ";
+					cin >> e;
+					cm->poner(e);
+					} break;
+			case 3: {
+					int e;
+					cm->sacar(e);
+					} break;
+			case 4: {
+					cout << cm->primero()<<endl;
+					} break;
+			case 5: {
+					cout << cm->to_str()<<endl;
+					} break;
+		}
+		system ("pause\n");
+		system("cls");
+	} while (opcion!=6);
+}
+
+
+
+/*----------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------*/

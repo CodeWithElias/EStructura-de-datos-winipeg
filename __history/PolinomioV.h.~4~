@@ -1,0 +1,32 @@
+//---------------------------------------------------------------------------
+
+#ifndef PolinomioVH
+#define PolinomioVH
+//---------------------------------------------------------------------------
+using namespace std;
+
+const int MaxP=100;
+
+class PolinomioV{
+	private:
+
+		int coeficinete[MaxP];
+		int exponente[MaxP];
+		int Nterminos;
+
+	public:
+		PolinomioV (); //Crea el polinomio
+		bool EsCero(); //Devuelve verdadero si el polinomio no tiene terminos
+		int Grado(); //devuelve (Grado del Polinomio)
+		int Coeficiente (int exp); //Devuelve el Coeficiente que corresponde al termino con exponente dado por el usuario
+		void Modificar_Coeficiente (int exp); //modifica el valor del coeficiente del término que tiene el grado
+		void Poner_Termino(int coef, int exp); // agrega un termino dado por el usuario al polinomio
+		int Numero_Terminos(); // Devuelve el numero de terminos que tiene el polinomio
+		int Exponente (int  nroter); // Devuelve el grado de termino de (nroter)
+		/*sumar(P1, P2: Polinomio)
+restar(P1, P2: Polinomio)
+multiplicar (P1, P2: Polinomio)
+ */
+};
+
+#endif

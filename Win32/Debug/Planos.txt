@@ -1,0 +1,65 @@
+1}
+pppppppppppp
+p  c      ep
+p          p
+pe  e      p
+ppp        p
+
+ppp        p
+p j    e   p
+p          p
+pppppp     pppppp
+p  e     e      p
+ppppppppppppppppp
+2}
+pppppppppppppppp
+p         e    p
+p    ppppp     p
+pe       p     p
+ppp    c p     p
+     ppppp
+ppp            p
+p j     p      p
+p       p      p
+pppppp     pppppp
+p  e            p
+ppppppppppppppppp
+3}
+  pppppppppppp
+  p         ep
+  p  pp      p
+  pe  p      p
+ppp   p   e  p
+      pp
+ppp    p     p
+  p j  ppp   p
+  p     c    p
+  pppppp     pppppp
+  p  e     e      p
+  ppppppppppppppppp
+4}
+ppppppppppppppppppppppppp
+p         ep            p
+p    e     p      e     p
+pe         p     c      p
+ppp        p            p
+                 e      p
+ppp        p            p
+p j   e    p      e     p
+p          p            p
+pppppp     ppp     
+p  e            ppppppppp
+ppppppppppppppppp
+5}
+ppppppppppppppppppppppppp
+p         ep   e        p
+p    e     p      ppppppp
+pe         p      p
+ppp        p      p
+              e   p
+ppp        p      ppppppp
+p j    e   p  c         p
+p          p       e    p
+pppppp     ppp     
+p  e            ppppppppp
+ppppppppppppppppp

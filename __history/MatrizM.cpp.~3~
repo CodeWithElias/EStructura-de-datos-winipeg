@@ -1,0 +1,174 @@
+//---------------------------------------------------------------------------
+
+#pragma hdrstop
+
+#include "MatrizM.h"
+//---------------------------------------------------------------------------
+#pragma package(smart_init)
+
+
+
+MatrizM::MatrizM(){
+	mem = new CSMemoria();
+	ptrmatd = Nulo;
+	nt = 0;
+	dimf =0;
+	dimc = 0;
+	rep = 0;
+}
+
+
+
+MatrizM::MatrizM(CSMemoria *m){
+	mem = m;
+	ptrmatd = Nulo;
+	nt = 0;
+}
+
+
+
+int MatrizM::anterior(int p){
+	if (nt == 0) {
+		cout << "ERROR VACIO\n";
+	}else if( p == ptrmatd){
+		cout << "DIRECCION INCORRECTA\n";
+	}else{
+		int x = ptrmatd;
+		int ant = Nulo;
+		while (x != Nulo){
+			if(x == p ){
+				return ant;
+			}
+			ant = x;
+			x = mem->obtener_dato(x, at_sig);
+		}
+
+	}
+}
+
+
+
+
+void MatrizM::suprime(int p){
+	if (nt == 0) {
+		return;
+	}else if (p == ptrmatd) {
+		  int x = ptrmatd;
+		  ptrmatd = mem->obtener_dato(ptrmatd, at_sig);
+		  mem->Delete_espacio(x);
+	}else{
+		int ant = anterior(p);
+		int p_sig = mem->obtener_dato(p, at_sig);
+		mem->poner_dato(ant, at_sig, p_sig);
+		mem->Delete_espacio(p);
+	}
+}
+
+
+
+void MatrizM::dimensionar(int f,int c){
+	dimf = f;
+	dimc = c;
+}
+
+
+
+
+int MatrizM::dimension_Fila(){
+	return dimf;
+}
+
+
+
+
+int MatrizM::dimension_Columna(){
+	return dimc;
+}
+
+
+
+
+int MatrizM::buscar(int f, int c){
+	int aux = ptrmatd;
+	while (aux != Nulo){
+		if (mem->obtener_dato(aux,at_fila) == f && mem->obtener_dato(aux, at_columna) == c) {
+			return aux;
+
+		}
+		aux = mem->obtener_dato(aux, at_sig);
+	}
+	return Nulo;
+
+}
+
+
+
+
+void MatrizM::poner(int f, int c, int valor){
+	if((f>=1 && f<=dimf) && (c>=1 && c<=dimc)){
+		int dir = buscar(f,c);
+		if(dir ==Nulo){
+			int x = mem->new_espacio(p_data);
+			if(x!=Nulo){
+				mem->poner_dato(x,at_fila,f);
+				mem->poner_dato(x,at_columna,c);
+				mem->poner_dato(x,at_dato,valor);
+				mem->poner_dato(x,at_sig,ptrmatd);
+				ptrmatd=x;
+			}else{
+				cout << "ERROR NO EXISTE ESPACIO EN MEMORIA\n";
+			}
+		}else{
+			if(dir!=Nulo){
+				mem->poner_dato(dir,at_dato,valor);
+				if(valor == rep){
+					//metodo eliminar nodo
+					if(dir==ptrmatd){
+						ptrmatd=mem->obtener_dato(ptrmatd,at_sig);
+					}else{
+						int ant;
+						ant=Nulo;
+						int aux=ptrmatd;
+						while(aux!=Nulo){
+							if(aux==dir){
+								break;
+							}
+							ant=aux;
+							aux=mem->obtener_dato(aux,at_sig);
+						}
+						mem->poner_dato(ant,at_sig,mem->obtener_dato(dir,at_sig));
+					}
+					mem->Delete_espacio(dir);
+					nt--;
+				}
+			}
+		}
+	}
+}
+
+
+
+
+int MatrizM::elemento(int f, int c){
+	if((f>=1 && f<=dimf) && (c>=1 && c<=dimc)){
+		int dir = buscar(f,c);
+		if(dir!=Nulo){
+			return mem->obtener_dato(dir,at_dato);
+		}else{
+			return rep;
+		}
+	}
+}
+
+
+
+void MatrizM::definir_valor_repetido(int valor){
+	rep=valor;
+}
+
+
+
+
+void MatrizM::to_str(){
+	mem->mostrar_memoria();
+}

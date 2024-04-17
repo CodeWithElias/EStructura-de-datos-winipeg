@@ -1,0 +1,111 @@
+//---------------------------------------------------------------------------
+
+#pragma hdrstop
+
+#include "UMemoria.h"
+//---------------------------------------------------------------------------
+#pragma package(smart_init)
+
+int Numero_Ids(string cadena){
+	int cantidad=0;
+	for (int i = 0; i < cadena.length(); i++) {
+		if (cadena[i]==',') {
+			cantidad ++;
+		}
+	}
+	if (!cadena.empty()) {
+		cantidad+=1;
+	} else{
+		cantidad+=0;
+	}
+	return cantidad;
+}
+
+string Obtener_Id(string cadena, int n){
+	string palabra="";
+	int contador=0;
+	int i=0;
+	while (contador<n-1 && i<cadena.length()){
+		if (cadena.at(i)==',') {   // at : compara con y devuelve verdadero si son iguales
+			contador ++;
+			cadena= cadena.substr(i+1,cadena.length()-(cadena.substr(0,i).length()));
+			i=-1;
+		}
+		i++;
+	}
+	i=0;
+	while (cadena[i]!=',' && i<cadena.length()){
+		i++;
+	}
+	palabra=cadena.substr(0,i);
+	return palabra;
+}
+
+
+	CSMemoria::CSMemoria(){  // crear   CONSTRUCTOR
+		mem=new NodoMem[Max];
+		for (int i = 0; i < Max; i++) {
+			mem[i].link=i+1;
+		}
+		mem[Max-1].link=-1;
+		this ->libre=0;
+	}
+
+	direccion_mem CSMemoria::new_espacio(string cadena){
+		int cant=Numero_Ids(cadena);
+		int dir=libre;
+		int d=libre;
+		for (int i=1; i<= cant-1; i++) {
+			mem[d].id=Obtener_Id(cadena,i);
+			d=mem[d].link;
+		}
+		libre=mem[d].link;
+		mem[d].link=-1;
+		mem[d].id=Obtener_Id(cadena, cant);
+		return dir;
+	}
+
+
+	void CSMemoria::Delete_espacio(direccion_mem dir){
+		int x=dir;
+		while (mem[x].link != -1){
+			x=mem[x].link;
+		}
+		mem[x].link=libre;
+		libre=x;
+	}
+
+
+	void CSMemoria::poner_dato(int dir, string cadena_id, int valor){
+
+	}
+
+	int CSMemoria::obtener_dato(int dir, string lugar){}
+
+	int CSMemoria::Espacio_disponible(){
+		int x = libre;
+		int c=0;
+		while (x!=NULL){ // null = -1
+			c++;
+			x=mem[x].link;
+		}
+		return c;
+	}
+
+	int CSMemoria::Espacio_ocupado(){
+		return (Max-Espacio_disponible());
+	}
+
+	bool CSMemoria::dir_libre(direccion_mem dir){
+		int x= libre;
+		bool c=false;
+		while ((x!=NULL) && (c==false)){
+			if (x==dir) {
+				c= true;
+			}
+			x=mem[x].link;
+		}
+		return c;
+	}
+
+	void CSMemoria::mostrar_memoria(){}

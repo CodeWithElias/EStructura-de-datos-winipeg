@@ -1,0 +1,37 @@
+﻿//---------------------------------------------------------------------------
+
+#ifndef ListaVH
+#define ListaVH
+//---------------------------------------------------------------------------
+#include <iostream>
+#include <string>
+using namespace std;
+
+typedef int TipoElemento;
+
+	const int Max=100;
+	const int Nulo=0;
+
+
+class Lista{
+	int Direccion;
+	private:
+		int long;
+		TipoElemento elemento[Max];
+
+	public:
+		Lista Crear();
+		int Direccion_fin();
+		int Direccion_primero();
+		int Direccion_siguiente(int Direccion);
+		int Direccion_anterior(int Direccion);
+		bool vacia();
+		TipoElemento recupera(int Direccion);
+		int longitud();
+		void inserta(int Direccion, TipoElemento elemento);
+		void inserta_primero(TipoElemento elemento);
+		void inserta_ultimo(TipoElemento elemento);
+		void suprime(int Direccion);
+		void modifica(int Direccion, TipoElemento elemento);
+};
+#endif

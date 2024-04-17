@@ -1,0 +1,21 @@
+//---------------------------------------------------------------------------
+
+#pragma hdrstop
+
+#include "ListaV.h"
+//---------------------------------------------------------------------------
+#pragma package(smart_init)
+
+		Lista Crear(){}
+		direccionI fin(){}
+		direccionI primero(){}
+		direccionI siguiente(direccionI dir){}
+		direccionI anterior(direccionI dir){}
+		bool vacia(){}
+		int recupera(direccionI dir){}
+		int longitud(){}
+		void inserta(direccionI dir, int e){}
+		void inserta_primero(int e){}
+		void inserta_ultimo(int e){}
+		void suprime(direccionI dir){}
+		void modifica(direccionI dir, int e){}
